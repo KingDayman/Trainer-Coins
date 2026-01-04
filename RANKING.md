@@ -4,7 +4,14 @@
 Provide a public, wallet-based ranking for Trainer Coins holders.
 
 ## Ranking Rule
-- Rank is determined by **current TC token balance** for a wallet.
+## Tier Thresholds (MVP 1)
+
+Tiers are based on current TC token balance:
+
+- 0 – 99,999  = Rookie
+- 100,000 – 499,999 = Trainer
+- 500,000 – 999,999 = Veteran
+- 1,000,000+ = Legend- Rank is determined by **current TC token balance** for a wallet.
 - Higher balance = higher rank.
 - Ties are allowed (or broken by wallet address as a deterministic fallback).
 
