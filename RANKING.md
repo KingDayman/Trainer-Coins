@@ -1,4 +1,4 @@
-# Trainer Coins Ranking (Option A)
+# Trainer Coins Ranking 
 
 ## Goal
 Provide a public, wallet-based ranking for Trainer Coins holders.
@@ -11,7 +11,8 @@ Tiers are based on current TC token balance:
 - 0 – 99,999  = Rookie
 - 100,000 – 499,999 = Trainer
 - 500,000 – 999,999 = Veteran
-- 1,000,000+ = Legend- Rank is determined by **current TC token balance** for a wallet.
+- 1,000,000+ = Legend
+- Rank is determined by **current TC token balance** for a wallet.
 - Higher balance = higher rank.
 - Ties are allowed (or broken by wallet address as a deterministic fallback).
 
