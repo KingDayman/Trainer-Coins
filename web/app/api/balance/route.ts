@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { Connection, PublicKey } from "@solana/web3.js";
 
+export const runtime = "nodejs";
+
+const RPC_URL = "https://api.mainnet-beta.solana.com";
 const MINT = new PublicKey("56hV4uhcLBjhvQhiA9yi5AsAS9AubDbpCHDCskf7pump");
 
+// TODO: Replace these with your real thresholds from RANKING.md
 function getTier(balance: number) {
   if (balance >= 1_000_000) return "Legend";
   if (balance >= 500_000) return "Veteran";
@@ -11,30 +15,40 @@ function getTier(balance: number) {
 }
 
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const wallet = searchParams.get("wallet");
-    if (!wallet) {
-      return NextResponse.json({ error: "Missing wallet" }, { status: 400 });
-    }
+  const { searchParams } = new URL(req.url);
+  const wallet = (searchParams.get("wallet") || "").trim();
 
-    const owner = new PublicKey(wallet);
-    const connection = new Connection("https://api.mainnet-beta.solana.com");
+  if (!wallet) {
+    return NextResponse.json({ ok: false, error: "Missing wallet" }, { status: 400 });
+  }
+
+  let owner: PublicKey;
+  try {
+    owner = new PublicKey(wallet);
+  } catch {
+    return NextResponse.json({ ok: false, error: "Invalid wallet" }, { status: 400 });
+  }
+
+  try {
+    const connection = new Connection(RPC_URL, "confirmed");
     const resp = await connection.getParsedTokenAccountsByOwner(owner, { mint: MINT });
 
+    // Sum all token accounts (important!)
     let balance = 0;
-    const acc = resp.value[0];
-    if (acc) {
-      const info: any = acc.account.data.parsed.info;
-      balance = Number(info.tokenAmount.uiAmount || 0);
+    for (const v of resp.value) {
+      const info: any = v.account.data.parsed.info;
+      const amt = Number(info?.tokenAmount?.uiAmount ?? 0);
+      balance += amt;
     }
 
     return NextResponse.json({
+      ok: true,
       wallet,
+      mint: MINT.toBase58(),
       balance,
       tier: getTier(balance),
     });
-  } catch {
-    return NextResponse.json({ error: "Invalid wallet" }, { status: 500 });
+  } catch (e) {
+    return NextResponse.json({ ok: false, error: "RPC error" }, { status: 500 });
   }
 }
