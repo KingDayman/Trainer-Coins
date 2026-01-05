@@ -1,4 +1,6 @@
-# Trainer Coins Ranking 
+[Home](index.md) | [Ranking](RANKING.md) | [Team Generator](team-generator.md)
+
+---# Trainer Coins Ranking 
 
 ## Goal
 Provide a public, wallet-based ranking for Trainer Coins holders.
