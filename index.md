@@ -1,7 +1,6 @@
 [Home](index.md) | [Ranking](RANKING.md) | [Team Generator](team-generator.md)
 
-
----# 🏆 Trainer Coins
+# 🏆 Trainer Coins
 
 **Trainer Coins** is a hold-focused crypto project inspired by classic game progression systems.
 
