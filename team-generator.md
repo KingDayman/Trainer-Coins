@@ -1,4 +1,6 @@
-# Team Generator Specification (MVP)
+[Home](index.md) | [Ranking](RANKING.md) | [Team Generator](team-generator.md)
+
+---# Team Generator Specification (MVP)
 
 ## Summary
 The Trainer Coins Team Generator creates a 6-member “team” for a wallet once per day, based on the wallet’s on-chain Trainer Coins balance and the project’s rank tiers.
