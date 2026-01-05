@@ -1,4 +1,6 @@
-[Home](index.md) | [Ranking](RANKING.md) | Team Generator (Coming Soon)
+[Home](index.md) | [Ranking](RANKING.md) | [Team Generator](team-generator.md)
+
+---Team Generator (Coming Soon)
 
 ---# 🏆 Trainer Coins
 
