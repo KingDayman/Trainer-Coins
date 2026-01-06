@@ -107,11 +107,19 @@ async function refreshRank() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  refreshRank();
+  let last = null;
 
-  // Re-check when wallet changes
-  window.addEventListener("tc_wallet_changed", refreshRank);
+  async function tick() {
+    const now = localStorage.getItem("tc_wallet");
+    if (now !== last) {
+      last = now;
+      await refreshRank();
+    }
+  }
 
-  // Safety: re-check shortly after load (fixes mobile timing issues)
-  setTimeout(refreshRank, 500);
+  // run immediately
+  tick();
+
+  // check every 800ms (cheap + reliable)
+  setInterval(tick, 800);
 });
