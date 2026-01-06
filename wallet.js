@@ -19,7 +19,7 @@ function setConnectedUI(publicKeyStr) {
   status.textContent = `Connected: ${shorten(publicKeyStr)}`;
   connectBtn.style.display = "none";
   disconnectBtn.style.display = "inline-block";
-  updateTierUI();
+
 }
 
 function setDisconnectedUI(message = "Not connected") {
@@ -49,7 +49,7 @@ async function connectWallet() {
   } catch (err) {
     setDisconnectedUI("Connection cancelled.");
     console.error(err);
- updateTierUI();
+
   }
 }
 
@@ -68,19 +68,7 @@ function restoreIfAvailable() {
   const saved = localStorage.getItem("tc_wallet");
   if (saved) setConnectedUI(saved);
 }
-function updateTierUI() {
-  const tierEl = document.getElementById("tierOutput");
-  if (!tierEl) return; // only runs on pages that have the tier box
 
-  const addr = localStorage.getItem("tc_wallet");
-  if (!addr) {
-    tierEl.textContent = "Connect your wallet to see your rank.";
-    return;
-  }
-
-  // TEMP tier for MVP v1 (proves the flow). We'll replace with real balance soon.
-  tierEl.textContent = "Rank: Rookie (MVP v1)";
-}
 document.addEventListener("DOMContentLoaded", () => {
   const connectBtn = document.getElementById("connectBtn");
   const disconnectBtn = document.getElementById("disconnectBtn");
