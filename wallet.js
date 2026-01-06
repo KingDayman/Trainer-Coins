@@ -75,3 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   restoreIfAvailable();
 });
+window.TCWallet = {
+  getAddress: () => localStorage.getItem("tc_wallet"),
+};
