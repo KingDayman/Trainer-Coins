@@ -108,5 +108,10 @@ async function refreshRank() {
 
 document.addEventListener("DOMContentLoaded", () => {
   refreshRank();
+
+  // Re-check when wallet changes
   window.addEventListener("tc_wallet_changed", refreshRank);
+
+  // Safety: re-check shortly after load (fixes mobile timing issues)
+  setTimeout(refreshRank, 500);
 });
