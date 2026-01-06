@@ -99,6 +99,8 @@ async function refreshRank() {
 
   try {
     const bal = await getTokenBalanceForOwner(owner);
+const amountStr = info?.tokenAmount?.uiAmountString;
+const amount = amountStr ? Number(amountStr) : 0;
     const tier = getTier(bal);
 
     setTierText(`Rank: ${tier}`);
