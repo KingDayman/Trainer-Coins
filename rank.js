@@ -10,25 +10,47 @@ function getTier(balance) {
 }
 
 // Public Solana RPC endpoint (works, but can be rate-limited)
-const RPC_URL = "https://api.mainnet-beta.solana.com";
+const RPC_URLS = [
+  "https://api.mainnet-beta.solana.com",
+  "https://rpc.ankr.com/solana",
+  "https://solana.public-rpc.com"
+];
 
 // ====== Helpers ======
 async function rpc(method, params) {
-  const res = await fetch(RPC_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      jsonrpc: "2.0",
-      id: 1,
-      method,
-      params,
-    }),
-  });
+  let lastErr = null;
 
-  if (!res.ok) throw new Error(`RPC HTTP ${res.status}`);
-  const data = await res.json();
-  if (data.error) throw new Error(data.error.message || "RPC error");
-  return data.result;
+  for (const url of RPC_URLS) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10_000);
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+      });
+
+      clearTimeout(timeout);
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(`RPC ${res.status} from ${url}`);
+      }
+      if (data.error) {
+        throw new Error(`${data.error.message || "RPC error"} (via ${url})`);
+      }
+
+      return data.result;
+    } catch (err) {
+      lastErr = err;
+      // try next URL
+    }
+  }
+
+  throw lastErr || new Error("All RPC endpoints failed");
 }
 
 function setTierText(text) {
