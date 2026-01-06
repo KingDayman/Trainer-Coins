@@ -60,9 +60,17 @@ function setTierText(text) {
 
 function setBalanceText(text) {
   const el = document.getElementById("balanceOutput");
-  if (el) el.textContent = text;
-}
+  if (!el) return;
 
+  // If caller passed just a number/string, format it consistently
+  if (typeof text === "number") {
+    el.textContent = `Balance: ${text.toLocaleString()} TC`;
+    return;
+  }
+
+  // If caller passed a full message, still show it
+  el.textContent = text.startsWith("Balance:") ? text : `Balance: ${text}`;
+}
 async function getTokenBalanceForOwner(owner) {
   try {
     // Derive the Associated Token Account (ATA)
