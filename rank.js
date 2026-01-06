@@ -1,5 +1,5 @@
 // ====== CONFIG (edit if needed) ======
-const TC_MINT = "56hV4uhcLBjhvQhiA9yi5AsAS9AubDbpCHDCskf7pump";
+const TC_MINT = "7BfrU29e1GW9giEnTjF8DoHM9L3UdNSGNPEkd3Xgpump";
 
 // Tier thresholds (you can adjust anytime)
 function getTier(balance) {
