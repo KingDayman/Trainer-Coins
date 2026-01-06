@@ -64,20 +64,32 @@ function setBalanceText(text) {
 }
 
 async function getTokenBalanceForOwner(owner) {
-  // Uses Solana JSON-RPC method getTokenAccountsByOwner with jsonParsed encoding
-  const result = await rpc("getTokenAccountsByOwner", [
-    owner,
-    { mint: TC_MINT },
-    { encoding: "jsonParsed" },
-  ]);
+  try {
+    // Derive the Associated Token Account (ATA)
+    const result = await rpc("getTokenAccountsByOwner", [
+      owner,
+      {
+        mint: TC_MINT,
+      },
+      {
+        encoding: "jsonParsed",
+      },
+    ]);
 
-  let total = 0;
+    if (!result?.value || result.value.length === 0) {
+      return 0;
+    }
 
-  for (const acc of result?.value || []) {
-    const info = acc?.account?.data?.parsed?.info;
-    const amount = info?.tokenAmount?.uiAmount;
-    if (typeof amount === "number") total += amount;
+    const acc = result.value[0];
+    const info = acc.account.data.parsed.info;
+    const amountStr = info.tokenAmount.uiAmountString;
+
+    return amountStr ? Number(amountStr) : 0;
+  } catch (err) {
+    console.error("Balance lookup failed:", err);
+    return 0;
   }
+}
 
   return total; // already UI amount (takes decimals into account)
 }
